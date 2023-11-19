@@ -1,8 +1,12 @@
 # GPS Route Tracking System
 
-This project includes a GPS route tracking system using React Native, EMQX (MQTT broker), MongoDB, and FastAPI. The system architecture involves:
+This project includes a GPS route tracking system using React Native, EMQX (MQTT broker), MongoDB, and FastAPI.
 
-![Algorithm I guess](assets/algorithm.png)
+| A Diagram of the project I guess | Geofencing Algorithm stuff |
+| ---------------------------------- | ------------------------------------ |
+| ![A Diagram of the project](assets/algorithm_2.png) | ![Geofencing Algo](assets/algorithm.png) |
+
+The system architecture involves:
 
 1. **React Native Application**: Sends current location data through MQTT every second.
 2. **EMQX (MQTT Broker)**: Handles real-time MQTT messages.
