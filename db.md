@@ -35,7 +35,9 @@
     "_id": ObjectId("..."),
     "route_id": "route-123",
     "name": "Route A-B-C-A",
-    "path": [
+    "isProcessed": true,
+    "isFinished": true,
+    "directions": [
       [longitude, latitude], // Start Point A
       [longitude, latitude], // Point B
       [longitude, latitude], // Point C
@@ -50,8 +52,10 @@
   ```json
   {
     "_id": ObjectId("..."),
-    "trip_id": "trip-456",
     "route_id": "route-123", // Reference to the Route
+    "driver": "driver-123", // Reference to the Driver
+    "vehicle": "vehicle-123", // Reference to the Vehicle
+    "isFinished": true,
     "start_time": ISODate("..."),
     "end_time": ISODate("..."),
     "actual_path": [
