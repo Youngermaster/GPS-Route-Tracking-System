@@ -16,6 +16,7 @@ interface DriverData {
   indexDriver: number;
   iconMetro: boolean;
   timestamp: number;
+  currentRouteId: string;
 }
 
 // In-memory storage object for MQTT client
@@ -99,6 +100,7 @@ const App: React.FC = () => {
         indexDriver: 1, // Example value, replace with actual
         iconMetro: false, // Example value, replace with actual
         timestamp: Date.now(),
+        currentRouteId: 'route-123', // Mocked current route ID
       };
 
       const message = new Message(JSON.stringify(driverData));
