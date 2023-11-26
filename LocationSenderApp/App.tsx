@@ -39,8 +39,7 @@ const App: React.FC = () => {
     // Create a client instance
     // ! 10.0.2.2 is the bridge to the localhost connection on the emulator
     // ! 10.0.2.2 -> Special alias to your host loopback interface (127.0.0.1 on your development machine)
-    // const client = new Client({ uri: 'ws://10.0.2.2:8083/mqtt', clientId: 'rn-client', storage: myStorage });
-    const client = new Client({ uri: 'ws://cpu-liability-tons-supposed.trycloudflare.com/mqtt', clientId: 'rn-client', storage: myStorage });
+    const client = new Client({ uri: 'ws://10.0.2.2:8083/mqtt', clientId: 'rn-client', storage: myStorage });
     setMqttClient(client);
 
     client.on('connectionLost', responseObject => {

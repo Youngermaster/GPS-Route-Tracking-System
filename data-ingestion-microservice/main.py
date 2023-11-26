@@ -10,8 +10,8 @@ MONGO_URI = "mongodb://root:examplepassword@localhost:27017"
 REDIS_HOST = "localhost"
 
 # Geofence Configuration (example coordinates and radius in meters)
-GEOFENCE_CENTER = (40.7128, -74.0060)  # Example: New York City coordinates
-GEOFENCE_RADIUS = 1000  # 1km radius
+GEOFENCE_CENTER = (6.1756, -75.5775)  # Example: EAFIT coordinates
+GEOFENCE_RADIUS = 50  # 50m radius
 
 # MongoDB and Redis Clients
 mongo_client = MongoClient(MONGO_URI)
@@ -38,13 +38,13 @@ def handle_location_data(data):
     location = (data["driverLocation"]["latitude"], data["driverLocation"]["longitude"])
 
     route = db.routes.find_one({"route_id": route_id})
-    if route and route.get("createPath"):
-        # If inside geofence and route is complete, update MongoDB and reset Redis
+    if route and not route.get("isProcessed"):
         if is_inside_geofence(location):
             path = redis_client.lrange(route_id, 0, -1)
-            path = [json.loads(point.decode("utf-8")) for point in path]
+            directions = [json.loads(point.decode("utf-8")) for point in path]
             db.routes.update_one(
-                {"route_id": route_id}, {"$set": {"path": path, "createPath": False}}
+                {"route_id": route_id},
+                {"$set": {"directions": directions, "isProcessed": True}},
             )
             redis_client.delete(route_id)
         else:
