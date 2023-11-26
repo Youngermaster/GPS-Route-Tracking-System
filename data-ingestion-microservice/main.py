@@ -3,6 +3,7 @@ import paho.mqtt.client as mqtt
 from pymongo import MongoClient
 import redis
 from geopy.distance import geodesic
+from datetime import datetime
 
 # MQTT Broker, MongoDB, and Redis Configurations
 MQTT_BROKER = "localhost"
@@ -11,7 +12,7 @@ REDIS_HOST = "localhost"
 
 # Geofence Configuration (example coordinates and radius in meters)
 GEOFENCE_CENTER = (6.1756, -75.5775)  # Example: EAFIT coordinates
-GEOFENCE_RADIUS = 50  # 50m radius
+GEOFENCE_RADIUS = 15  # 15m radius
 
 # MongoDB and Redis Clients
 mongo_client = MongoClient(MONGO_URI)
@@ -33,22 +34,42 @@ def on_message(client, userdata, msg):
     handle_location_data(data)
 
 
+def create_trip_document(route_id, path):
+    trip_document = {
+        "route_id": route_id,
+        "driver": "driver-123",  # Replace with actual data
+        "vehicle": "vehicle-123",  # Replace with actual data
+        "isFinished": True,
+        "start_time": datetime.now(),  # Replace with actual start time
+        "end_time": datetime.now(),  # Replace with actual end time
+        "actual_path": path, # []
+    }
+    db.trips.insert_one(trip_document)
+
+
 def handle_location_data(data):
     route_id = data.get("currentRouteId")
     location = (data["driverLocation"]["latitude"], data["driverLocation"]["longitude"])
 
     route = db.routes.find_one({"route_id": route_id})
-    if route and not route.get("isProcessed"):
+    if route:
         if is_inside_geofence(location):
             path = redis_client.lrange(route_id, 0, -1)
-            directions = [json.loads(point.decode("utf-8")) for point in path]
-            db.routes.update_one(
-                {"route_id": route_id},
-                {"$set": {"directions": directions, "isProcessed": True}},
-            )
+            path = [json.loads(point.decode("utf-8")) for point in path]
+
+            if not route.get("isProcessed"):
+                # If route is not processed, update the route document
+                # reduced_path = reducer(path)
+                db.routes.update_one(
+                    {"route_id": route_id},
+                    {"$set": {"directions": path, "isProcessed": True}},
+                )
+            else:
+                # If route is already processed, create a new trip document
+                create_trip_document(route_id, path)
+
             redis_client.delete(route_id)
         else:
-            # Store location data in Redis
             redis_client.rpush(route_id, json.dumps(location))
 
 
