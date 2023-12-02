@@ -60,7 +60,7 @@ def handle_location_data(data):
 
             if not route.get("isProcessed"):
                 # If route is not processed, update the route document
-                reduced_path = ramer_douglas_peucker(path, 0.0001)  # 10 meters threshold, I think :P
+                reduced_path = ramer_douglas_peucker(path, 0.00005)  # 10 meters threshold, I think :P
                 db.routes.update_one(
                     {"route_id": route_id},
                     {
@@ -71,6 +71,7 @@ def handle_location_data(data):
                         }
                     },
                 )
+                create_trip_document(route_id, path)
             else:
                 # If route is already processed, create a new trip document
                 create_trip_document(route_id, path)

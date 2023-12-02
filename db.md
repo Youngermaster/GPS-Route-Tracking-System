@@ -59,6 +59,10 @@
     "start_time": ISODate("..."),
     "end_time": ISODate("..."),
     "actual_path": [
+      [longitude, latitude, timestamp], // Start Point A
+      [longitude, latitude, timestamp], // Point B
+      [longitude, latitude, timestamp], // Point C
+      [longitude, latitude, timestamp]  // End Point A
       // Potentially more detailed path data for this specific trip
     ],
     // Other dynamic trip details...
