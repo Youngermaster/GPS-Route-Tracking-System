@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from server.routes.user import router as UserRouter
 from server.routes.authentication import router as AuthRouter
-from server.routes.keyword import router as KeywordRouter
 from server.routes.route import router as RouteRouter
 
 from decouple import config
@@ -25,10 +24,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(RouteRouter, tags=["Route"], prefix="/route")
 app.include_router(AuthRouter, tags=["Authentication"])
 app.include_router(UserRouter, tags=["User"], prefix="/user")
-app.include_router(KeywordRouter, tags=["Keyword"], prefix="/keyword")
-app.include_router(RouteRouter, tags=["Route"], prefix="/route")
 
 
 @app.get("/", tags=["Root"])
