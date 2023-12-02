@@ -4,6 +4,7 @@ from pymongo import MongoClient
 import redis
 from geopy.distance import geodesic
 from datetime import datetime
+from polyline_reducer import ramer_douglas_peucker
 
 # MQTT Broker, MongoDB, and Redis Configurations
 MQTT_BROKER = "localhost"
@@ -42,7 +43,7 @@ def create_trip_document(route_id, path):
         "isFinished": True,
         "start_time": datetime.now(),  # Replace with actual start time
         "end_time": datetime.now(),  # Replace with actual end time
-        "actual_path": path, # []
+        "actual_path": path,  # []
     }
     db.trips.insert_one(trip_document)
 
@@ -59,10 +60,16 @@ def handle_location_data(data):
 
             if not route.get("isProcessed"):
                 # If route is not processed, update the route document
-                # reduced_path = reducer(path)
+                reduced_path = ramer_douglas_peucker(path, 10)  # 10 meters threshold
                 db.routes.update_one(
                     {"route_id": route_id},
-                    {"$set": {"directions": path, "isProcessed": True}},
+                    {
+                        "$set": {
+                            "directions": path,
+                            "polyline": reduced_path,
+                            "isProcessed": True,
+                        }
+                    },
                 )
             else:
                 # If route is already processed, create a new trip document

@@ -5,11 +5,13 @@ dnspython==2.4.2
 geographiclib==2.0
 geopy==2.4.0
 mypy-extensions==1.0.0
+numpy==1.26.2
 packaging==23.2
 paho-mqtt==1.6.1
 pathspec==0.11.2
 platformdirs==4.0.0
 pymongo==4.6.0
 redis==5.0.1
+shapely==2.0.2
 tomli==2.0.1
 typing_extensions==4.8.0

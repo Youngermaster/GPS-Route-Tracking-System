@@ -104,7 +104,7 @@ const App: React.FC = () => {
 
       const message = new Message(JSON.stringify(driverData));
       message.destinationName = 'location/rn-client';
-      console.log(message);
+      // console.log(message);
       mqttClient.send(message);
     }
   };

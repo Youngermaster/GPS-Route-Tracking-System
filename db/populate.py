@@ -14,6 +14,7 @@ route_document = {
     "isProcessed": False,  # Indicates that the route path is not yet created
     "isFinished": False,  # Indicates the overall route status
     "directions": [],  # Empty array to be populated with real-time data
+    "polyline": [],  # Empty array to be populated with the polyline points.
 }
 
 # Inserting the Document into the Collection
