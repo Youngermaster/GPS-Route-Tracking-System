@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      MONGO_URL: "mongodb://root:examplepassword@localhost:27017/?authMechanism=DEFAULT"
+      SECRET_KEY: "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
+      PORT: 6969
+      ACCESS_TOKEN_EXPIRE_MINUTES: 30
+      PROJECT_ENVIRONMENT: "DEVELOPMENT"
+    ports:
+      - "6969:6969"
