@@ -60,7 +60,7 @@ def handle_location_data(data):
 
             if not route.get("isProcessed"):
                 # If route is not processed, update the route document
-                reduced_path = ramer_douglas_peucker(path, 10)  # 10 meters threshold
+                reduced_path = ramer_douglas_peucker(path, 0.0001)  # 10 meters threshold, I think :P
                 db.routes.update_one(
                     {"route_id": route_id},
                     {

@@ -1,3 +1,4 @@
+import time
 from shapely.geometry import LineString
 
 
@@ -12,6 +13,13 @@ def ramer_douglas_peucker(points, epsilon):
     Returns:
     - list of tuples: The simplified list of points.
     """
+    print("Ramer-Douglas-Peucker algorithm started")
+    start_time = time.time()  # Start timer
+
     line = LineString(points)
     simplified_line = line.simplify(epsilon)
+
+    end_time = time.time()  # End timer
+    print(f"Ramer-Douglas-Peucker algorithm took {end_time - start_time:.6f} seconds.")
+
     return list(simplified_line.coords)
