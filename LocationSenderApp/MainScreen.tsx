@@ -1,7 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Button, Text, TouchableOpacity, Alert, PermissionsAndroid, Platform } from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Alert,
+  PermissionsAndroid,
+  Platform,
+} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
-import { Client, Message } from 'react-native-paho-mqtt';  // MQTT client for react-native
+import {Client, Message} from 'react-native-paho-mqtt'; // MQTT client for react-native
 
 // Define the data structure for each driver
 interface DriverData {
@@ -30,7 +38,7 @@ const myStorage = {
   },
 };
 
-const MainScreen = ({ navigation }) => {
+const MainScreen = ({navigation}) => {
   const [isSharing, setIsSharing] = useState(false);
   const [mqttClient, setMqttClient] = useState<Client | null>(null);
   const watchId = useRef<number | null>(null); // Ref to store the watch ID
@@ -39,7 +47,11 @@ const MainScreen = ({ navigation }) => {
     // Create a client instance
     // ! 10.0.2.2 is the bridge to the localhost connection on the emulator
     // ! 10.0.2.2 -> Special alias to your host loopback interface (127.0.0.1 on your development machine)
-    const client = new Client({ uri: 'ws://10.0.2.2:8083/mqtt', clientId: 'rn-client', storage: myStorage });
+    const client = new Client({
+      uri: 'ws://10.0.2.2:8083/mqtt',
+      clientId: 'rn-client',
+      storage: myStorage,
+    });
     setMqttClient(client);
 
     client.on('connectionLost', responseObject => {
@@ -48,7 +60,8 @@ const MainScreen = ({ navigation }) => {
       }
     });
 
-    client.connect()
+    client
+      .connect()
       .then(() => {
         console.log('Connected to MQTT broker');
       })
@@ -72,10 +85,10 @@ const MainScreen = ({ navigation }) => {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           {
-            title: "Location Access Required",
-            message: "This app needs to access your location.",
-            buttonPositive: "OK"
-          }
+            title: 'Location Access Required',
+            message: 'This app needs to access your location.',
+            buttonPositive: 'OK',
+          },
         );
         return granted === PermissionsAndroid.RESULTS.GRANTED;
       } catch (err) {
@@ -112,13 +125,17 @@ const MainScreen = ({ navigation }) => {
   const startLocationTracking = async () => {
     const hasPermission = await requestLocationPermission();
     if (hasPermission) {
-      watchId.current = Geolocation.watchPosition(sendLocation, error =>
-        Alert.alert('Error', JSON.stringify(error)),
-        { enableHighAccuracy: true, distanceFilter: 1, interval: 1000 }
+      watchId.current = Geolocation.watchPosition(
+        sendLocation,
+        error => Alert.alert('Error', JSON.stringify(error)),
+        {enableHighAccuracy: true, distanceFilter: 1, interval: 1000},
       );
       setIsSharing(true);
     } else {
-      Alert.alert('Permission Denied', 'Location permission is required to use this feature');
+      Alert.alert(
+        'Permission Denied',
+        'Location permission is required to use this feature',
+      );
     }
   };
 
@@ -141,9 +158,13 @@ const MainScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={toggleSharing}>
-        <Text style={styles.buttonText}>{isSharing ? 'Stop Sharing' : 'Share Location'}</Text>
+        <Text style={styles.buttonText}>
+          {isSharing ? 'Stop Sharing' : 'Share Location'}
+        </Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('MapScreen')}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('MapScreen')}>
         <Text style={styles.buttonText}>Show Route</Text>
       </TouchableOpacity>
     </View>

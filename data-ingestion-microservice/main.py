@@ -27,7 +27,7 @@ def is_inside_geofence(coord):
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code " + str(rc))
-    client.subscribe("location/rn-client")
+    client.subscribe("location/#")
 
 
 def on_message(client, userdata, msg):

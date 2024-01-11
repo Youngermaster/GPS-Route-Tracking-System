@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
-import MapView, { Polyline } from 'react-native-maps';
+import React, {useState, useEffect} from 'react';
+import {View} from 'react-native';
+import MapView, {Polyline} from 'react-native-maps';
 
 const MapScreen = () => {
   const [polyline, setPolyline] = useState([]);
@@ -8,7 +8,9 @@ const MapScreen = () => {
 
   const fetchPolyline = async () => {
     try {
-      const response = await fetch('http://10.0.2.2:6969/route/route-123/polyline');
+      const response = await fetch(
+        'http://10.0.2.2:6969/route/route-123/polyline',
+      );
       const data = await response.json();
       setPolyline(data.polyline);
 
@@ -32,16 +34,16 @@ const MapScreen = () => {
   }, []);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       {initialRegion && (
-        <MapView
-          style={{ flex: 1 }}
-          initialRegion={initialRegion}
-        >
+        <MapView style={{flex: 1}} initialRegion={initialRegion}>
           <Polyline
-            coordinates={polyline.map(coord => ({ latitude: coord[0], longitude: coord[1] }))}
+            coordinates={polyline.map(coord => ({
+              latitude: coord[0],
+              longitude: coord[1],
+            }))}
             strokeWidth={3}
-            strokeColor='green'
+            strokeColor="green"
           />
         </MapView>
       )}

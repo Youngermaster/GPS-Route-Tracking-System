@@ -1,0 +1,26 @@
+version: '3.8' # Specifies the version of Docker Compose to use
+
+services:
+  consumer-service:
+    build: . # Specifies the Dockerfile location, in this case, the same directory as this file
+    env_file:
+      # Specifies a file from which to read environment variables
+      - .env # The .env file
+    environment:
+      # Specifies additional environment variables
+      REDIS_HOST: ${REDIS_HOST} # The host of the Redis server
+      REDIS_PORT: ${REDIS_PORT} # The port of the Redis server
+      RIDE_BACKEND_URL: ${RIDE_BACKEND_URL} # The URL of the ride backend
+      BASE_URL: ${BASE_URL} # The base URL of the service
+      MQTT_BROKER: ${MQTT_BROKER} # The MQTT broker
+      # Set the timezone to America/Bogota
+      TZ: "America/Bogota"
+    networks:
+      # Specifies the networks the service can connect to
+      - ecodrive_network # The name of the network
+
+networks:
+  # Defines networks
+  ecodrive_network:
+    # The name of the network
+    external: true # Specifies that this network has been created externally and not by this file
